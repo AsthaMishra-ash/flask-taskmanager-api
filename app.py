@@ -55,3 +55,46 @@ def delete_task(id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# Update task
+@app.route('/tasks/<int:id>', methods=['PUT'])
+def update_task(id):
+    task = Task.query.get(id)
+
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+
+    data = request.json
+    task.title = data.get("title", task.title)
+    task.completed = data.get("completed", task.completed)
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Task updated",
+        "task": {
+            "id": task.id,
+            "title": task.title,
+            "completed": task.completed
+        }
+    })
+    
+# Mark task as completed
+@app.route('/tasks/<int:id>/complete', methods=['PATCH'])
+def complete_task(id):
+    task = Task.query.get(id)
+
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+
+    task.completed = True
+    db.session.commit()
+
+    return jsonify({
+        "message": "Task marked as completed",
+        "task": {
+            "id": task.id,
+            "title": task.title,
+            "completed": task.completed
+        }
+    })
