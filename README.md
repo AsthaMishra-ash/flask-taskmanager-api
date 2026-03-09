@@ -31,3 +31,5 @@ SQLAlchemy
 
 ## Deployment
 API deployed on Render
+## Live API
+https://flask-taskmanager-api-1.onrender.com
